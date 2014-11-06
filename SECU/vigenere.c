@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 
+
 void chiffre(char* fentree, char* cle, char* fsortie)
 {
 
@@ -132,24 +133,10 @@ void decrypte(char* fentree, char* fsortie)
 }
 	
 
-
-/*	for(i=0; i<26; i++)
-	{
-		ic = ic+(tabFreq[i]*(tabFreq[i]-1))/(taille*(taille-1));
-		printf("%f\n", ic);
-	}
-*/
-	
-
-	
-		
-	   
-
-	
-
-
 int main(int argc, char *argv[])
 {
+	
+	printf("test\n");
 	if(argc < 4)
 	{
 		return 0;
