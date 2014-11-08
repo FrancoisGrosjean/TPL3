@@ -51,6 +51,10 @@ void fusionEtats (automate* A, int p1, int p2);
 
 //Retourne le produit de deux automates
 automate* produit(automate* au1, automate* au2);
+
+//Retourne 1 si l'intersection est vide, 0 sinon.
+int intersectionVide(automate* au1, automate* au2);
+
 	
 
 

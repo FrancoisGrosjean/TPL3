@@ -48,21 +48,23 @@ automate* choixAutomate()
 
 void menu1(automate* A)
 {
-	int depart, arrivee, choix, n;
+	int depart, arrivee, choix, n, e1, e2;
 	char etiquette;
 	
 	while(1)
 	{
 		printf("\n");
-		printf("1. Ajouter une transition.\n");
-		printf("2. Compter les transitions.\n");
-		printf("3. Déterministe?\n");		
-		printf("4. Complet?\n");
-		printf("5. Supprimer Transition .\n");
-		printf("6. Supprimer état.\n");
-		printf("7. Compléter un automate.\n");
-		printf("8. Afficher un automate.\n");
-		printf("0. Retour au menu.\n");
+		printf("1.  Ajouter une transition.\n");
+		printf("2.  Compter les transitions.\n");
+		printf("3.  Déterministe?\n");		
+		printf("4.  Complet?\n");
+		printf("5.  Supprimer Transition .\n");
+		printf("6.  Supprimer état.\n");
+		printf("7.  Compléter un automate.\n");
+		printf("8.  Afficher un automate.\n");
+		printf("9.  Ajouter un état.\n");
+		printf("10. Fusionner deux états.\n\n");
+		printf("0.  Retour au menu.\n");
 		scanf("%d",&choix);
 		scanf("%*[^\n]s");
 		getchar();
@@ -82,7 +84,7 @@ void menu1(automate* A)
 				printf("arrivée : ");
 				scanf("%d",&arrivee);
 				scanf("%*[^\n]s");
-				printf("etiquette : ");
+				printf("étiquette : ");
 				scanf("%c",&etiquette);
 				scanf("%*[^\n]s");
 				getchar();
@@ -91,8 +93,7 @@ void menu1(automate* A)
 			break;
 			case 2:
 			{
-				n = compteTransition();
-				printf("	Il y a %d transition(s).\n", n);
+				printf("	Il y a %d transition(s).\n", compteTransition(A));
 			}
 			break;
 			case 3:
@@ -154,6 +155,23 @@ void menu1(automate* A)
 				afficheAutomate(A);
 			}
 			break;
+			case 9:
+			{
+				ajoutEtat(A);
+			}
+			break;
+			case 10: 
+			{
+				printf("état 1 : ");
+				scanf("%d",&e1);
+				scanf("%*[^\n]s");
+				printf("état 1 : ");
+				scanf("%d",&e2);
+				scanf("%*[^\n]s");
+				
+				fusionEtats(A, e1, e2);
+			}
+			break;
 		}
 	}
 }
@@ -165,10 +183,10 @@ void menu2(automate* A)
 	while(1)
 	{
 		printf("\n");
-		printf("1. Langage vide?\n");
-		printf("2. Supprimer Non co-accessible.\n");
-		printf("3. Supprimer Non accessible.\n");
-		printf("0. Retour au menu.\n");
+		printf("1.  Langage vide?\n");
+		printf("2.  Supprimer Non co-accessible.\n");
+		printf("3.  Supprimer Non accessible.\n\n");
+		printf("0.  Retour au menu.\n");
 		scanf("%d",&choix);
 		scanf("%*[^\n]s");
 		getchar();
@@ -222,13 +240,13 @@ void menu(automate* A)
 	while(1)
 	{
 		printf("\n");
-		printf("1. Propriétés d'un automate.\n");
-		printf("2. Test du vide.\n");
-		printf("3. Produit d'automates.\n");
-		printf("4. Déterminisation.\n");
-		printf("5. Minimisation.\n");
-		printf("6. Changer d'automates.\n");
-		printf("0. Quitter.\n");
+		printf("1.  Propriétés d'un automate.\n");
+		printf("2.  Test du vide.\n");
+		printf("3.  Produit d'automates.\n");
+		printf("4.  Déterminisation.\n");
+		printf("5.  Minimisation.\n");
+		printf("6.  Changer d'automates.\n\n");
+		printf("0.  Quitter.\n");
 		scanf("%d",&choix);
 		scanf("%*[^\n]s");
 		getchar();
@@ -278,10 +296,7 @@ int main()
 	automate* A;
 	A = choixAutomate();
 	
-	//supprimeNonCoAccessibles(A);
-	
 	menu(A);
-	
 	
 	/*A = construitAutomateExemple();
 	ajouteTransition(A, 0, 1, 'b');

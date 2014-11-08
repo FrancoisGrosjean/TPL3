@@ -108,7 +108,6 @@ int compteTransition(automate* A)
 	
 			while(tmp != NULL)
 			{
-				printf("%d", nbTransition);
 				nbTransition++;
 				tmp=tmp->suiv;
 			}
@@ -318,8 +317,13 @@ void fusionEtats(automate* A, int p1, int p2)
 
 automate* produit(automate* au1, automate* au2)
 {
-	int i, j, size, sizealpha, tgrand, tpetit;
+	int i, j, m, size, sizealpha;
 	automate* produit;
+	automate* petit;
+	automate* grand;
+	liste* tmpPetit;
+	liste* tmpGrand;
+	
 	
 	if(au1->sizealpha >= au2->sizealpha)
 	{
@@ -333,38 +337,42 @@ automate* produit(automate* au1, automate* au2)
 	
 	if(au1->size >= au2->size)
 	{
-		tgrand = au1->size;
-		tpetit = au2->size;
+		m = au1->size;
+		grand = au1;
+		petit = au2;
 	}
 	else
 	{
-		tgrand= au2->size;
-		tpetit = au1->size;
+		m = au2->size;
+		grand = au2;
+		petit = au1;
 	}
 	
-	size = tgrand*tpetit;
+	size = au1->size*au2->size;
 	produit->size = size;
 	produit->sizealpha = sizealpha;
 	
 	produit->initial = (int*)malloc(size*sizeof(int));
 	produit->final = (int*)malloc(size*sizeof(int));
 	
-	for(i=0; i < size; i++)
+	for(i=0;i<size;i++)
 	{
 		
-		if((au1->initial[i] == 1)&&(au2->initial[i]== 1))
+		if((petit->initial[i/m] == 1)&&(grand->initial[i%m]== 1))
 		{
 			produit->initial[i] = 1;
 		}
+		else
+		{
+			produit->initial[i] = 0;
+		}
 		
-		if((au1->final[i] == 1)&&(au2->final[i]))
+		if((petit->final[i/m] == 1)&&(au2->final[i%m]))
 		{
 			produit->final[i] = 1;
 		}
-		
-		if(i > tpetit)
+		else
 		{
-			produit->initial[i] = 0;
 			produit->final[i] = 0;
 		}
 	}
@@ -373,7 +381,7 @@ automate* produit(automate* au1, automate* au2)
 	
 	for(i=0;i<size;i++)
 	{
-		produit->trans[i]= (liste**) malloc(sizealpha*sizeof(liste*));
+		produit->trans[i] = (liste**) malloc(sizealpha*sizeof(liste*));
 		
 			for(j=0;j<sizealpha;j++)
 			{
@@ -381,9 +389,34 @@ automate* produit(automate* au1, automate* au2)
 			}
 	}
 	
-	
+	for(i-0;i<size;i++)
+	{
+		for(j=0;j<sizealpha;j++)
+		{
+			tmpGrand = grand->trans[i%m][j];
+			tmpPetit = petit->trans[i/m][j];
+			
+			while(NULL != tmpGrand)
+			{
+				ajouteTransition(produit, i, ((tmpPetit->state*m)+tmpGrand->state), 'a'+j);
+				tmpGrand = tmpGrand->suiv;
+			}
+			tmpPetit = tmpPetit->suiv;
+			tmpGrand = grand->trans[i%m][j];
+		}
+	}
 }
+			
+int intersectionVide(automate* au1, automate* au2)
+{
+	automate* tmp = (automate*)malloc(sizeof(automate));
+	int res = 0;
 	
+	tmp = produit(au1, au2);
+	res = langageVide(tmp);
+
+	return res;
+}
 	
 
 
