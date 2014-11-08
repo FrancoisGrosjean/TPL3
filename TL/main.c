@@ -82,7 +82,7 @@ void menu1(automate* A)
 				printf("arrivée : ");
 				scanf("%d",&arrivee);
 				scanf("%*[^\n]s");
-				printf("départ : ");
+				printf("etiquette : ");
 				scanf("%c",&etiquette);
 				scanf("%*[^\n]s");
 				getchar();
@@ -278,14 +278,15 @@ int main()
 	automate* A;
 	A = choixAutomate();
 	
+	//supprimeNonCoAccessibles(A);
+	
 	menu(A);
 	
-	/*automate* A;
-	A = construitAutomateExemple();
-	afficheAutomate(A);	
+	
+	/*A = construitAutomateExemple();
+	ajouteTransition(A, 0, 1, 'b');
+	afficheAutomate(A);	*/
 
-	fusionEtats(A, 0, 1);
-	afficheAutomate(A);*/
 }
 	
 		

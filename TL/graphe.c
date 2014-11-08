@@ -3,7 +3,7 @@
 
 int chemin(graphe* G, int p, int q)
 {
-	int couleur[G->size];
+	int* couleur = malloc(G->size*sizeof(int));
 	parcoursP(G, couleur, p);
 	
 	return couleur[q];
@@ -27,14 +27,16 @@ void visiterPP(graphe* G, int* couleur, int p)
 	liste* tmp = G->sommets[p];
 	couleur[tmp->state] = 1;
 
+	tmp = tmp->suiv;
+
 	while(NULL != tmp)
 	{
-		tmp = tmp->suiv;
-		
 		if(couleur[tmp->state] == 0)
 		{
 			visiterPP(G, couleur, tmp->state);
 		}
+		
+		tmp = tmp->suiv;
 	}
 }
 
