@@ -4,6 +4,85 @@ void ajouteTransition(automate* A, int depart, int arrivee, char etiquette)
 {
 	ajouteListe(&A->trans[depart][etiquette-'a'], arrivee);
 }
+
+automate* creerAutomate()
+{
+	automate* A = (automate*)malloc(sizeof(automate));
+	int i, j, size, sizealpha, init, final, n, cible, transition;
+	
+	printf("Nombre d'état(s) : ");
+	scanf("%i", &size);
+	printf("Taille de l'alphabet : ");
+	scanf("%i", &sizealpha);
+	
+	A->size = size;
+	A->sizealpha = sizealpha;
+	
+	A->initial = (int*) malloc(A->size*sizeof(int));
+	A->final = (int*) malloc(A->size*sizeof(int));
+	
+	printf("Nombre d'état(s) initial : ");
+	scanf("%i", &init);
+	printf("Nombre d'état(s) final : ");
+	scanf("%i", &final);
+	
+	for(i=0;i<A->size;i++)
+	{
+		A->initial[i] = 0;
+		A->final[i] = 0;
+	}
+	
+	for(i=0; i<init; i++)
+	{
+		printf("Etat initial %i : ", i+1);
+		scanf("%d",&n);
+		scanf("%*[^\n]s");
+		getchar();
+		A->initial[n] = 1;
+	}
+
+	for(i=0; i<final; i++)
+	{
+		printf("Etat final %i : ", i+1);
+		scanf ("%d",&n);
+		scanf("%*[^\n]s");
+		getchar();
+		A->final[n] = 1;
+	}
+	
+	A->trans = (liste***) malloc(A->size*sizeof(liste***));
+	
+	for(i=0;i<A->size;i++)
+	{
+		A->trans[i]=(liste**) malloc(A->sizealpha*sizeof(liste*));
+		
+		for(j=0;j<A->sizealpha;j++)
+		{
+			A->trans[i][j] = NULL;
+		}
+	}
+	
+	for(i=0;i<A->size;i++)
+	{
+		printf("\nEtat %d\n", i);
+		printf("Nombre de transition(s) : ");
+		scanf ("%d",&n);
+		scanf("%*[^\n]s");
+		getchar();
+		
+		for(j=0; j<n; j++)
+		{
+			printf("Etat cible (de 0 à %d): ", A->size-1);
+			scanf ("%d",&cible);
+
+			printf("Transition ( de 0 (a) jusqu'à %d (%c) : ", A->sizealpha-1, 'a'+A->sizealpha-1); 
+			scanf ("%d",&transition);
+			scanf("%*[^\n]s");
+			ajouteTransition(A, i, cible, 'a'+transition);
+		}
+	}
+	return A;
+}
 	
 automate* construitAutomateExemple()
 {
@@ -121,7 +200,7 @@ int deterministe(automate* A)
 {
 	int i, j;
 	liste* tmp;
-	
+
 	for(i=0; i<A->size; i++)
 	{
 		for(j=0; j<A->sizealpha; j++)

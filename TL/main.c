@@ -6,6 +6,7 @@ automate* choixAutomate();
 void menu1(automate* A);
 void menu2(automate* A);
 
+
 automate* choixAutomate()
 {
 	
@@ -23,33 +24,34 @@ automate* choixAutomate()
 		scanf("%*[^\n]s");
 		getchar();
 		
-		switch(choix)
-		{
-			case 1:
+	
+			switch(choix)
 			{
-				err = 0;
-				//A = creerAutomate() 
+				case 1:
+				{
+					err = 0;
+					A = creerAutomate();
+				}
+				break;
+				case 2:
+				{
+					err = 0;
+					A = construitAutomateExemple();
+				}
+				break;
+				default:
+				{
+					printf("	Erreur, cette action n'est pas disponible.");
+				}
 			}
-			break;
-			case 2:
-			{
-				err = 0;
-				A = construitAutomateExemple();
-			}
-			break;
-			default:
-			{
-				printf("	Erreur, cette action n'est pas disponible.");
-			}
-		}
+		
 	}
 	return A;
 }
 
 void menu1(automate* A)
 {
-	int depart, arrivee, choix, n, e1, e2;
-	char etiquette;
+	int depart, arrivee, choix, n, e1, e2, etiquette;
 	
 	while(1)
 	{
@@ -85,10 +87,10 @@ void menu1(automate* A)
 				scanf("%d",&arrivee);
 				scanf("%*[^\n]s");
 				printf("étiquette : ");
-				scanf("%c",&etiquette);
+				scanf("%d",&etiquette);
 				scanf("%*[^\n]s");
 				getchar();
-				ajouteTransition(A, depart, arrivee, etiquette);
+				ajouteTransition(A, depart, arrivee, 'a'+etiquette);
 			}
 			break;
 			case 2:
@@ -131,10 +133,10 @@ void menu1(automate* A)
 				scanf("%d",&arrivee);
 				scanf("%*[^\n]s");
 				printf("etiquette : ");
-				scanf("%c",&etiquette);
+				scanf("%d",&etiquette);
 				scanf("%*[^\n]s");
 				getchar();
-				supprimeTransition(A, depart, arrivee, etiquette);
+				supprimeTransition(A, depart, arrivee, 'a'+etiquette);
 			}
 			break;
 			case 6:

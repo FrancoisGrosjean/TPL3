@@ -19,6 +19,9 @@ void ajouteTransition(automate* A, int depart, int arrivee, char etiquette);
 //Crée en mémoire l'automate exemple et renvoie un pointeur vers cet automate
 automate* construitAutomateExemple();
 
+//Création d'un automate avec saisie des paramètres.
+automate* creerAutomate();
+
 //Affiche le contenu de l'automate A
 void afficheAutomate (automate* A);
 

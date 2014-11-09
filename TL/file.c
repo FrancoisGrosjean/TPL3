@@ -1,4 +1,4 @@
-
+#include "file.h"
 
 int estDansFile(ifile f, int* pt, int n){
 	int i;
@@ -37,7 +37,7 @@ void ajouteFile(ifile* f, int* pt,int n){
 		tmp->val[i]=pt[i];
 	}
 	
-	tmp->suiv=NULL;
+	tmp->suiv = NULL;
 	tmp->tailleVal=n;
 	
 	if(f->fin != NULL)
