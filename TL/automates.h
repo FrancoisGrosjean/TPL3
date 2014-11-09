@@ -58,7 +58,8 @@ automate* produit(automate* au1, automate* au2);
 //Retourne 1 si l'intersection est vide, 0 sinon.
 int intersectionVide(automate* au1, automate* au2);
 
-	
+//Déterminise un automate.
+void determinise(automate* A);
 
 
 

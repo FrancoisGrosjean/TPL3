@@ -167,7 +167,7 @@ void menu1(automate* A)
 				printf("état 1 : ");
 				scanf("%d",&e1);
 				scanf("%*[^\n]s");
-				printf("état 1 : ");
+				printf("état 2 : ");
 				scanf("%d",&e2);
 				scanf("%*[^\n]s");
 				
@@ -231,7 +231,56 @@ void menu2(automate* A)
 	}
 }
 	
-			
+void menu3(automate* A)
+{
+	int choix;
+	automate* B = (automate*)malloc(sizeof(automate));
+	
+	while(1)
+	{
+		printf("\n");
+		printf("1.  Faire le produit de deux automates.\n");
+		printf("2.  Intersection du vide?.\n\n");
+		printf("0.  Retour au menu.\n");
+		scanf("%d",&choix);
+		scanf("%*[^\n]s");
+		getchar();
+		
+		switch(choix)
+		{
+			case 0:
+			{
+				menu(A);
+			}
+			break;
+			case 1:
+			{
+				B = choixAutomate();
+				A = produit(A, B);
+			}
+			break;
+			case 2:
+			{
+				B = choixAutomate();
+				if(intersectionVide(A, B) == 1)
+				{
+					printf("Il y a intersection.\n");
+				}
+				else
+				{
+					printf("Il n'y a pas intersection.\n");
+				}
+			}
+			break;
+			default:
+			{
+				printf("	Erreur, cette action n'est pas disponible.\n");
+			}
+		}
+	}
+}
+		
+	
 				
 	
 
@@ -247,7 +296,7 @@ void menu(automate* A)
 		printf("3.  Produit d'automates.\n");
 		printf("4.  Déterminisation.\n");
 		printf("5.  Minimisation.\n");
-		printf("6.  Changer d'automates.\n\n");
+		printf("6.  Changer d'automate.\n\n");
 		printf("0.  Quitter.\n");
 		scanf("%d",&choix);
 		scanf("%*[^\n]s");
@@ -270,7 +319,9 @@ void menu(automate* A)
 			}
 			break;
 			case 3:
-			{}
+			{
+				menu3(A);
+			}
 			break;
 			case 4:
 			{}
@@ -299,10 +350,6 @@ int main()
 	A = choixAutomate();
 	
 	menu(A);
-	
-	/*A = construitAutomateExemple();
-	ajouteTransition(A, 0, 1, 'b');
-	afficheAutomate(A);	*/
 
 }
 	

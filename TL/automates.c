@@ -397,9 +397,9 @@ void fusionEtats(automate* A, int p1, int p2)
 automate* produit(automate* au1, automate* au2)
 {
 	int i, j, m, size, sizealpha;
-	automate* produit;
-	automate* petit;
-	automate* grand;
+	automate* produit = (automate*)malloc(sizeof(automate));
+	automate* petit = (automate*)malloc(sizeof(automate));
+	automate* grand = (automate*)malloc(sizeof(automate));
 	liste* tmpPetit;
 	liste* tmpGrand;
 	
@@ -427,7 +427,7 @@ automate* produit(automate* au1, automate* au2)
 		petit = au1;
 	}
 	
-	size = au1->size*au2->size;
+	size = grand->size*petit->size;
 	produit->size = size;
 	produit->sizealpha = sizealpha;
 	
@@ -497,7 +497,46 @@ int intersectionVide(automate* au1, automate* au2)
 	return res;
 }
 	
+void determinise(automate* A)
+{
+	int i, j;
+	
+		ifile* file = (ifile*)malloc(sizeof(ifile));
+	file->debut = NULL;
+	file->fin = NULL;
+	
+	liste* tmp;
+	liste* tmpFile;
+	
+	if(deterministe(A) == 1)
+	{
+		return;
+	}
+	
 
+	
+	for(i=0; i<A->size; i++)
+	{
+		if(au->initial[i] == 1)
+		{
+			j = i;
+		}
+	}
+	
+	t[0] = j;
+	ajouteFile(file, pt, 1);
+	
+	tmpFile = file->debut;
+	while(NULL != tmpFile)
+	{
+		for(i=0; i<A->sizealpha; i++)
+		{
+			for(j=0; j<tmpFile->tailleVal; j++)
+			{
+				tmp = A->trans[tmpFile->val[i]][j]
+	
+			
+		
 
 
 	

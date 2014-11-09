@@ -95,7 +95,7 @@ void supprimeGraphe(graphe* G)
 int langageVide(automate* A)
 {
 	int i, j;
-	graphe* G;
+	graphe* G = (graphe*)malloc(sizeof(graphe));
 	
 	G = automateToGraphe(A);
 	
@@ -120,11 +120,11 @@ int langageVide(automate* A)
 	return 1;
 }
 
-//TODO			
+		
 void supprimeNonCoAccessibles(automate* A)
 {
 	int i, j, res;
-	graphe* G;
+	graphe* G = (graphe*)malloc(sizeof(graphe));
 	
 	int etat[A->size];
 	
@@ -168,7 +168,7 @@ void supprimeNonCoAccessibles(automate* A)
 void supprimeNonAccessibles(automate* A)
 {
 	int i, j, res;
-	graphe* G;
+	graphe* G = (graphe*)malloc(sizeof(graphe));
 	
 	int etat[A->size];
 	
