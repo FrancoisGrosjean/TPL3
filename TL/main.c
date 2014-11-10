@@ -63,9 +63,8 @@ void menu1(automate* A)
 		printf("5.  Supprimer Transition .\n");
 		printf("6.  Supprimer état.\n");
 		printf("7.  Compléter un automate.\n");
-		printf("8.  Afficher un automate.\n");
-		printf("9.  Ajouter un état.\n");
-		printf("10. Fusionner deux états.\n\n");
+		printf("8.  Ajouter un état.\n");
+		printf("9.  Fusionner deux états.\n\n");
 		printf("0.  Retour au menu.\n");
 		scanf("%d",&choix);
 		scanf("%*[^\n]s");
@@ -154,15 +153,10 @@ void menu1(automate* A)
 			break;
 			case 8:
 			{
-				afficheAutomate(A);
-			}
-			break;
-			case 9:
-			{
 				ajoutEtat(A);
 			}
 			break;
-			case 10: 
+			case 9: 
 			{
 				printf("état 1 : ");
 				scanf("%d",&e1);
@@ -233,7 +227,7 @@ void menu2(automate* A)
 	
 void menu3(automate* A)
 {
-	int choix;
+	int choix, res;
 	automate* B = (automate*)malloc(sizeof(automate));
 	
 	while(1)
@@ -262,13 +256,15 @@ void menu3(automate* A)
 			case 2:
 			{
 				B = choixAutomate();
-				if(intersectionVide(A, B) == 1)
+				res = intersectionVide(A,B);
+				
+				if(res == 1)
 				{
-					printf("Il y a intersection.\n");
+					printf("\n	Il y a intersection.\n");
 				}
 				else
 				{
-					printf("Il n'y a pas intersection.\n");
+					printf("\n	Il n'y a pas intersection.\n");
 				}
 			}
 			break;
@@ -296,7 +292,8 @@ void menu(automate* A)
 		printf("3.  Produit d'automates.\n");
 		printf("4.  Déterminisation.\n");
 		printf("5.  Minimisation.\n");
-		printf("6.  Changer d'automate.\n\n");
+		printf("6.  Afficher un automate.\n");
+		printf("7.  Changer d'automate.\n\n");
 		printf("0.  Quitter.\n");
 		scanf("%d",&choix);
 		scanf("%*[^\n]s");
@@ -330,6 +327,11 @@ void menu(automate* A)
 			{}
 			break;
 			case 6:
+			{
+				afficheAutomate(A);
+			}
+			break;
+			case 7:
 			{
 				A = choixAutomate();
 			}

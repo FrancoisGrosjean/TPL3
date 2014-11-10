@@ -403,7 +403,6 @@ automate* produit(automate* au1, automate* au2)
 	liste* tmpPetit;
 	liste* tmpGrand;
 	
-	
 	if(au1->sizealpha >= au2->sizealpha)
 	{
 		sizealpha = au1->sizealpha;
@@ -446,7 +445,7 @@ automate* produit(automate* au1, automate* au2)
 			produit->initial[i] = 0;
 		}
 		
-		if((petit->final[i/m] == 1)&&(au2->final[i%m]))
+		if((petit->final[i/m] == 1)&&(au2->final[i%m] == 1))
 		{
 			produit->final[i] = 1;
 		}
@@ -455,6 +454,8 @@ automate* produit(automate* au1, automate* au2)
 			produit->final[i] = 0;
 		}
 	}
+	
+
 	
 	produit->trans = (liste***) malloc(size*sizeof(liste**));
 	
@@ -468,28 +469,33 @@ automate* produit(automate* au1, automate* au2)
 			}
 	}
 	
-	for(i-0;i<size;i++)
+	for(i=0;i<size;i++)
 	{
+		
 		for(j=0;j<sizealpha;j++)
 		{
 			tmpGrand = grand->trans[i%m][j];
 			tmpPetit = petit->trans[i/m][j];
 			
-			while(NULL != tmpGrand)
+			while(tmpPetit != NULL)
 			{
-				ajouteTransition(produit, i, ((tmpPetit->state*m)+tmpGrand->state), 'a'+j);
-				tmpGrand = tmpGrand->suiv;
+				while(NULL != tmpGrand)
+				{
+					ajouteTransition(produit, i, ((tmpPetit->state * m)+tmpGrand->state), (char)('a'+j));
+					tmpGrand = tmpGrand->suiv;
+				}
+				tmpPetit = tmpPetit->suiv;
+				tmpGrand = grand->trans[i%m][j];
 			}
-			tmpPetit = tmpPetit->suiv;
-			tmpGrand = grand->trans[i%m][j];
 		}
 	}
+	return produit;
 }
 			
 int intersectionVide(automate* au1, automate* au2)
 {
 	automate* tmp = (automate*)malloc(sizeof(automate));
-	int res = 0;
+	int res;
 	
 	tmp = produit(au1, au2);
 	res = langageVide(tmp);
@@ -497,7 +503,7 @@ int intersectionVide(automate* au1, automate* au2)
 	return res;
 }
 	
-void determinise(automate* A)
+/*void determinise(automate* A)
 {
 	int i, j;
 	
@@ -535,7 +541,7 @@ void determinise(automate* A)
 			{
 				tmp = A->trans[tmpFile->val[i]][j]
 	
-			
+*/		
 		
 
 

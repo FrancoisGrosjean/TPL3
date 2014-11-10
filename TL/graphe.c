@@ -25,7 +25,9 @@ void parcoursP(graphe* G, int* couleur, int p)
 void visiterPP(graphe* G, int* couleur, int p)
 {
 	liste* tmp = G->sommets[p];
-	couleur[tmp->state] = 1;
+	
+	couleur[p] = 1;
+	
 
 	tmp = tmp->suiv;
 
