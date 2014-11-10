@@ -502,46 +502,60 @@ int intersectionVide(automate* au1, automate* au2)
 
 	return res;
 }
-	
-/*void determinise(automate* A)
-{
-	int i, j;
-	
-		ifile* file = (ifile*)malloc(sizeof(ifile));
-	file->debut = NULL;
-	file->fin = NULL;
-	
-	liste* tmp;
-	liste* tmpFile;
-	
-	if(deterministe(A) == 1)
-	{
-		return;
-	}
-	
 
+
+void determinise(automate* A)
+{
+	int i, j, n;
+	
+	ifile* file = (ifile*)malloc(sizeof(ifile));
+	int* pt = (int*)malloc(A->size*sizeof(int));
+	liste* tmp;
+	
 	
 	for(i=0; i<A->size; i++)
 	{
-		if(au->initial[i] == 1)
+		
+		for(j=0; j<A->sizealpha; j++)
 		{
-			j = i;
+			tmp = A->trans[i][j];
+			n = 0;
+			while(NULL != tmp)
+			{
+				pt[n] = tmp->state;
+				tmp = A->trans[i][j];
+				n++;
+			}
+			
+			pt = realloueMemoire(pt, n);
+			
+	
+			if(estDansFile(file, pt, n) == 0)
+			{
+				ajouteFile(file, pt, n);
+			}
 		}
 	}
 	
-	t[0] = j;
-	ajouteFile(file, pt, 1);
+	afficheFile(file);
+}
 	
-	tmpFile = file->debut;
-	while(NULL != tmpFile)
-	{
-		for(i=0; i<A->sizealpha; i++)
-		{
-			for(j=0; j<tmpFile->tailleVal; j++)
-			{
-				tmp = A->trans[tmpFile->val[i]][j]
+
+
 	
-*/		
+
+
+
+
+
+
+
+
+
+
+
+
+		
 		
 
 

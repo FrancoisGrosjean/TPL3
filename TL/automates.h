@@ -2,6 +2,7 @@
 #define NA_CONCAT_H
 
 #include "liste.h"
+#include "file.h"
 
 
 typedef struct

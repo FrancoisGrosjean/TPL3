@@ -2,7 +2,7 @@
 
 
 int chemin(graphe* G, int p, int q)
-{
+{	
 	int* couleur = malloc(G->size*sizeof(int));
 	parcoursP(G, couleur, p);
 	
@@ -27,12 +27,10 @@ void visiterPP(graphe* G, int* couleur, int p)
 	liste* tmp = G->sommets[p];
 	
 	couleur[p] = 1;
-	
-
-	tmp = tmp->suiv;
 
 	while(NULL != tmp)
 	{
+	
 		if(couleur[tmp->state] == 0)
 		{
 			visiterPP(G, couleur, tmp->state);
@@ -171,23 +169,26 @@ void supprimeNonAccessibles(automate* A)
 {
 	int i, j, res;
 	graphe* G = (graphe*)malloc(sizeof(graphe));
+
 	
 	int etat[A->size];
-	
+
 	G = automateToGraphe(A);
 	
+		
 	
 	for(i=0; i<A->size; i++)
 	{
 		etat[i] = 0;
 	}
 	
-	for(i=0; i<A->size; j++)
+	
+	for(i=0; i<A->size; i++)
 	{
 		res = 0;
 		for(j=0; j<A->size; j++)
 		{
-			if(A->initial[i] == 1)
+			if(A->initial[j] == 1)
 			{
 				res = res + chemin(G, j, i);
 			}

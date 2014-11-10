@@ -1,9 +1,9 @@
 #include "file.h"
 
-int estDansFile(ifile f, int* pt, int n){
+int estDansFile(ifile* f, int* pt, int n){
 	int i;
 	iliste* tmp;
-	tmp = f.debut;
+	tmp = f->debut;
 	
 	while(tmp)
 	{
@@ -53,12 +53,12 @@ void ajouteFile(ifile* f, int* pt,int n){
 	f->debut= tmp;
 }
 
-void afficheFile(ifile f){
+void afficheFile(ifile* f){
 	iliste* pt;
 	int i;
 	int j = 0;
 	
-	pt=f.debut;
+	pt=f->debut;
 	
 	while(pt)
 	{

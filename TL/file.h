@@ -1,7 +1,8 @@
 #ifndef FILE_H
 #define FILE_H
 
-#include "graphe.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct s_iliste
 {
@@ -17,10 +18,10 @@ typedef struct
 	iliste* fin;
 } ifile;
 
-int estDansFile(ifile f, int* pt, int n);
+int estDansFile(ifile* f, int* pt, int n);
 
 void ajouteFile(ifile* f, int* pt,int n);
 
-void afficheFile(ifile f);
+void afficheFile(ifile* f);
 
 #endif
