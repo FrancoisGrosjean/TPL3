@@ -6,7 +6,6 @@
 #include <unistd.h>
 
 
-
 void chiffre(char* fentree, char* cle, char* fsortie)
 {
 
@@ -56,82 +55,138 @@ void dechiffre(char* fentree, char* cle, char* fsortie)
 	
 	chiffre(fentree, cleInv, fsortie);
 }
-	
-	
-int indiceCoincidence(char* fentree, int incr)
+
+char* lecture(char* fentree)
 {
+	int nbLettre, i;
 	struct stat buf;
 	char car;
-	int i, taille, nbLettre;
-	int tabFreq[26];
-	float ic = 0.0;
-	float ni, n;
 	
-	for(i=0;i<26;i++)
-	{
-		tabFreq[i] = 0;
-	}
-
 	if (stat(fentree, &buf) == -1)
 	{
         	perror("stat");
         	exit(EXIT_SUCCESS);
    	}
-	
-	i = 0;
 	nbLettre = 0;
-	
-	taille = buf.st_size;
+	int taille = buf.st_size;
 	char* message = malloc(taille*sizeof(char));
-	FILE *fe = fopen(fentree, "r");
+	
+	FILE* fe = fopen(fentree, "r");
 
 	while ((car = fgetc(fe)) != EOF)
 	{
 			if((car >= 'A')&&(car <= 'Z'))
 			{
+				message[nbLettre] = car;
 				nbLettre++;
-				message[i] = car;
 			}
 	}
+
+	fclose(fe);
+	return message;
+}
+
+int* frequence(char* message, int debut, int incr)
+{
+	int i, taille;
+	int* tabFreq = (int*)malloc(26*sizeof(int));
 	
-	for(i=0;i<taille;i=i+incr)
+	taille = strlen(message);
+
+	
+	for(i=debut;i<taille;i=i+incr)
 	{
 		tabFreq[message[i]-'A']++;
-	}	
+	}
+	
+	return tabFreq;
+}
+
+
+	
+float indiceCoincidence(char* message, int debut, int incr)
+{
+	
+	int i, nbLettre;
+	float ic = 0.0;
+	float ni, n;
+	nbLettre = strlen(message);
+	
+	int* tabFreq = frequence(message, debut, incr);
+	
 	
 	for(i=0;i<26;i++)
 	{
-		/*ni = tabFreq[i]*(tabFreq[i]-1);
+		ni = tabFreq[i]*(tabFreq[i]-1);
 		n = nbLettre*(nbLettre-1);
-		ic = ic+(ni/n);
-		printf("%d %f\n", tabFreq[i], ic);*/
+
 		
-		printf("%d\n", tabFreq[i]);
+		ic = ic+(ni/n);
 	}
 	
-	fclose(fe);
 	return ic;
 	
 }
-	
-	
+
 void decrypte(char* fentree, char* fsortie)
 {
-	int tailleCle, i;
-	float ic = 0.0;
+	int i, j, n;
+	int* tabFreq;
+	double e = 0.003;
+	double indice = 0.0;
+	double ic = 0.0;
+	double a = 0.076-e;
+	double b = 0.076+e;
 	
-	i = 1;
+	char* message = lecture(fentree);
 	
-	while(ic < 0.067)
+	n = 1;
+	
+	/*while(!((indice > a)&&(indice < b)))
 	{
-		ic = indiceCoincidence(fentree, i);
-		i++;
+		printf("bla");
+		ic = 0.0;
+		for(i=0;i<n;i++)
+		{
+			ic = ic + indiceCoincidence(message, i, n);
+		}
+		ic = ic/n;
+		indice = indice + ic;
+		n++;
+		sleep(10);
 	}
 	
-	tailleCle = i-1;
-	printf("La taille de la clé est de %d pour un indice de coincidence de %f\n", tailleCle, ic);
-}
+	printf("La taille de la clé est %d\n", n);
 	
+	*/
+	
+	double indice1 = 0.0;
+	
+	indice1 = indiceCoincidence(message, 0, 1);
+	printf("id %f\n", indice1);
+	
+	double indice2 = 0.0;
+	
+	indice2 = indiceCoincidence(message, 0, 2);
+	indice2 = indice2 + indiceCoincidence(message, 1, 2);
+	indice2 = indice2/2;
+	
+	printf("id %f\n", indice2);
+	
+	double indice3 = 0.0;
+	
+	indice3 = indiceCoincidence(message, 0, 3);
+	indice3 = indice3 + indiceCoincidence(message, 1, 3);
+	indice3 = indice3 + indiceCoincidence(message, 2, 3);
+	indice3 = indice3/3;
+	
+	printf("id %f\n", indice3);
+	
+	indice = indice1+indice2+indice3;
+	printf("indice = %f\n", indice);
+	
+}
+
 
 int main(int argc, char *argv[])
 {
