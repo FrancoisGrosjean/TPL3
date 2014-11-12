@@ -91,13 +91,23 @@ int* frequence(char* message, int debut, int incr)
 	int i, taille;
 	int* tabFreq = (int*)malloc(26*sizeof(int));
 	
-	taille = strlen(message);
-
+	for(i=0;i<26;i++)
+	{
+		tabFreq[i] = 0;
+	}
 	
+	taille = strlen(message);
 	for(i=debut;i<taille;i=i+incr)
+	
 	{
 		tabFreq[message[i]-'A']++;
 	}
+	
+	for(i=0;i<26;i++)
+	{
+		printf("%d ", tabFreq[i]);
+	}
+	printf("\n");
 	
 	return tabFreq;
 }
@@ -130,21 +140,21 @@ float indiceCoincidence(char* message, int debut, int incr)
 
 void decrypte(char* fentree, char* fsortie)
 {
-	int i, j, n;
+	int i, j, n, tailleCle;
 	int* tabFreq;
 	double e = 0.003;
 	double indice = 0.0;
 	double ic = 0.0;
 	double a = 0.076-e;
 	double b = 0.076+e;
+	char* cle;
 	
 	char* message = lecture(fentree);
 	
 	n = 1;
 	
-	/*while(!((indice > a)&&(indice < b)))
+	while(!((indice > a)&&(indice < b)))
 	{
-		printf("bla");
 		ic = 0.0;
 		for(i=0;i<n;i++)
 		{
@@ -153,45 +163,46 @@ void decrypte(char* fentree, char* fsortie)
 		ic = ic/n;
 		indice = indice + ic;
 		n++;
-		sleep(10);
+		printf("indice %f\n", indice);
 	}
 	
-	printf("La taille de la clé est %d\n", n);
+	tailleCle = n-1;
+	printf("La taille de la clé est %d\n", tailleCle);
+	cle = (char*)malloc(sizeof(char));
 	
-	*/
+	int max, indiceMax;
+	char c;
 	
-	double indice1 = 0.0;
+	max = 0;
 	
-	indice1 = indiceCoincidence(message, 0, 1);
-	printf("id %f\n", indice1);
+	for(i=0;i<tailleCle;i++)
+	{
+		tabFreq = frequence(message, i, 4);
+		
+		for(j=0;j<26;j++)
+		{
+			if(tabFreq[j] > max)
+			{
+				max = tabFreq[j];
+				indiceMax = j;
+			}
+		}
+	}
 	
-	double indice2 = 0.0;
+	/*for(i=0;i<tailleCle;i++)
+	{
+		printf("%c", cle[i]);
+	}*/
 	
-	indice2 = indiceCoincidence(message, 0, 2);
-	indice2 = indice2 + indiceCoincidence(message, 1, 2);
-	indice2 = indice2/2;
 	
-	printf("id %f\n", indice2);
 	
-	double indice3 = 0.0;
-	
-	indice3 = indiceCoincidence(message, 0, 3);
-	indice3 = indice3 + indiceCoincidence(message, 1, 3);
-	indice3 = indice3 + indiceCoincidence(message, 2, 3);
-	indice3 = indice3/3;
-	
-	printf("id %f\n", indice3);
-	
-	indice = indice1+indice2+indice3;
-	printf("indice = %f\n", indice);
 	
 }
 
 
 int main(int argc, char *argv[])
 {
-	
-	printf("test\n");
+
 	if(argc < 4)
 	{
 		return 0;
