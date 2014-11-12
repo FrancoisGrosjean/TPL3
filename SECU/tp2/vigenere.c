@@ -178,6 +178,7 @@ void decrypte(char* fentree, char* fsortie)
 	for(i=0;i<tailleCle;i++)
 	{
 		tabFreq = frequence(message, i, 4);
+		max = 0;
 		
 		for(j=0;j<26;j++)
 		{
@@ -187,12 +188,19 @@ void decrypte(char* fentree, char* fsortie)
 				indiceMax = j;
 			}
 		}
+		
+		c = 'A'+(('A'+indiceMax-'E')%26+26)%26;
+		cle[i] = c;
+	
 	}
 	
-	/*for(i=0;i<tailleCle;i++)
+	printf("La clé est : ");
+	for(i=0;i<tailleCle;i++)
 	{
 		printf("%c", cle[i]);
-	}*/
+	}
+	printf("\n");
+	
 	
 	
 	
