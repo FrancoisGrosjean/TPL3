@@ -207,12 +207,12 @@ void decrypte(char* fentree, char* fsortie)
 	
 	int stop;
 	
-
-	
+	while(stop == 0)
+	{
 		printf("Le texte peut ne pas apparaitre comme il faut.\n");
 		printf("1. Modifier la taille de la clé.\n");
 		printf("2. Modifier un caractère de la clé à la main.\n");
-
+	}
 	
 	
 	
