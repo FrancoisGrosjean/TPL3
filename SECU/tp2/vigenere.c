@@ -80,6 +80,7 @@ char* lecture(char* fentree)
 				message[nbLettre] = car;
 				nbLettre++;
 			}
+			printf("%c", car);
 	}
 
 	fclose(fe);
@@ -103,11 +104,6 @@ int* frequence(char* message, int debut, int incr)
 		tabFreq[message[i]-'A']++;
 	}
 	
-	for(i=0;i<26;i++)
-	{
-		printf("%d ", tabFreq[i]);
-	}
-	printf("\n");
 	
 	return tabFreq;
 }
@@ -140,10 +136,10 @@ float indiceCoincidence(char* message, int debut, int incr)
 
 void decrypte(char* fentree, char* fsortie)
 {
-	int i, j, n, tailleCle;
+	int i, j, n, tailleCle, taille;
 	int* tabFreq;
-	double e = 0.003;
 	double indice = 0.0;
+	double e = 0.003;
 	double ic = 0.0;
 	double a = 0.076-e;
 	double b = 0.076+e;
@@ -163,7 +159,6 @@ void decrypte(char* fentree, char* fsortie)
 		ic = ic/n;
 		indice = indice + ic;
 		n++;
-		printf("indice %f\n", indice);
 	}
 	
 	tailleCle = n-1;
@@ -201,8 +196,9 @@ void decrypte(char* fentree, char* fsortie)
 	}
 	printf("\n");
 	
+	dechiffre(fentree, cle, fsortie);
 	
-	
+	char* test = lecture(fsortie);
 	
 	
 }
@@ -210,7 +206,6 @@ void decrypte(char* fentree, char* fsortie)
 
 int main(int argc, char *argv[])
 {
-
 	if(argc < 4)
 	{
 		return 0;
