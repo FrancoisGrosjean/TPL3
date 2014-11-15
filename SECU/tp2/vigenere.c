@@ -134,41 +134,62 @@ float indiceCoincidence(char* message, int debut, int incr)
 	}
 	
 	return ic;
-	
 }
 
-void decrypte(char* fentree, char* fsortie)
+int calculeIndice(char* message, int taille)
 {
-	int i, j, n, tailleCle, taille;
+	int i, j, n, tailleCle;
 	int* tabFreq;
 	double indice = 0.0;
 	double e = 0.003;
 	double ic = 0.0;
 	double a = 0.076-e;
 	double b = 0.076+e;
-	char* cle;
-	
-	char* message = lecture(fentree);
+
 	
 	n = 1;
 	
-	while(!((indice > a)&&(indice < b)))
+	if(taille == 0)
 	{
-		ic = 0.0;
-		for(i=0;i<n;i++)
+		while(!((indice > a)&&(indice < b)))
 		{
-			ic = ic + indiceCoincidence(message, i, n);
+			ic = 0.0;
+			for(i=0;i<n;i++)
+			{
+				ic = ic + indiceCoincidence(message, i, n);
+			}
+			ic = ic/n;
+			indice = indice + ic;
+			n++;
 		}
-		ic = ic/n;
-		indice = indice + ic;
-		n++;
+		
 	}
-	
+	else
+	{
+		for(i=0;i<taille;i++)
+		{
+			ic = 0.0;
+			for(j=0;j<n;j++)
+			{
+				ic = ic + indiceCoincidence(message, j, n);
+			}
+			ic = ic/n;
+			indice = indice + ic;
+			n++;
+		}
+	}
+			
 	tailleCle = n-1;
-	printf("La taille de la clé est %d\n", tailleCle);
-	cle = (char*)malloc(sizeof(char));
 	
-	int max, indiceMax;
+	printf("Indice de coincidence de %f pour une clé de taille %d.\n", indice, tailleCle);
+	return tailleCle;
+}
+
+
+char* calculeCle(int tailleCle, int* tabFreq, char* message)
+{
+	char* cle = (char*)malloc(tailleCle*sizeof(char));
+	int max, indiceMax, i, j;
 	char c;
 	
 	max = 0;
@@ -189,8 +210,27 @@ void decrypte(char* fentree, char* fsortie)
 		
 		c = 'A'+(('A'+indiceMax-'E')%26+26)%26;
 		cle[i] = c;
-	
 	}
+	
+	return cle;
+ }
+
+void decrypte(char* fentree, char* fsortie)
+{
+	int i, j, n, tailleCle, taille, choix, stop;
+	char car;
+	int* tabFreq;
+	double indice = 0.0;
+	double e = 0.003;
+	double ic = 0.0;
+	double a = 0.076-e;
+	double b = 0.076+e;
+	char* cle;
+	
+	char* message = lecture(fentree);
+	
+	tailleCle = calculeIndice(message, 0);
+	cle = calculeCle(tailleCle, tabFreq, message);
 	
 	printf("La clé est : ");
 	for(i=0;i<tailleCle;i++)
@@ -199,23 +239,95 @@ void decrypte(char* fentree, char* fsortie)
 	}
 	printf("\n");
 	
-	dechiffre(fentree, cle, fsortie);
 	
-
+	dechiffre(fentree, cle, fsortie);
 	message = lecture(fsortie);
 	printf("\n");
+;
+	stop = 0;
 	
-	int stop;
-	
-
-	
-		printf("Le texte peut ne pas apparaitre comme il faut.\n");
+	while(1)
+	{
+		printf("0. Arrêter.\n");
 		printf("1. Modifier la taille de la clé.\n");
-		printf("2. Modifier un caractère de la clé à la main.\n");
-
+		printf("2. Modifier un caractère de la clé manuellement.\n");
+		scanf("%d",&choix);
+		scanf("%*[^\n]s");
+		getchar();
 	
-	
-	
+		switch(choix) 
+		{
+			case 0:
+			{
+				exit(1);
+			}
+			break;
+			case 1: 
+			{
+				printf("Taille précédente : %d.\n", tailleCle);
+				printf("Nouvelle taille de clé : ");
+				scanf("%d",&tailleCle);
+				scanf("%*[^\n]s");
+				getchar();
+				
+				tailleCle = calculeIndice(message, tailleCle); 	
+				cle = calculeCle(tailleCle, tabFreq, message);
+				dechiffre(fentree, cle, fsortie);
+			}
+			break;
+			case 2:
+			{
+				while(stop == 0)
+				{
+					printf("Clé actuelle : %s.\n", cle);
+					printf("Indice du caractère à modifier : ");
+					scanf("%d",&i);
+					scanf("%*[^\n]s");
+					getchar();
+					if((i > tailleCle-1)||(i<0))
+					{
+						printf("Erreur, l'indice n'est pas compris dans la clé.\n");
+					}
+					else
+					{
+						printf("Nouvelle lettre de la clé à l'indice %d : ", i);
+						scanf("%c",&car);
+						scanf("%*[^\n]s");
+						getchar();
+						if((car < 'A')||( car > 'Z'))
+						{
+							printf("Erreur, la lettre saisie n'est pas compris entre A et Z\n");
+						}
+						else
+						{
+							cle[i] = car;
+							printf("La nouvelle clé est donc %s\n", cle);
+							
+							dechiffre(fentree, cle, fsortie);
+							lecture(fsortie);
+							
+							printf("1. La clé convient.\n");
+							printf("0. La clé ne convient pas.(annuler)\n");
+							scanf("%d",&stop);
+							scanf("%*[^\n]s");
+							getchar();
+							
+						}
+					}
+				}
+				
+				
+			
+			
+				
+			}
+			break;
+			default:  
+			{
+				printf("Commande non spécifiée.\n");
+			}
+		}
+	}
 	
 }
 
