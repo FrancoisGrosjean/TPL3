@@ -69,6 +69,7 @@ char* lecture(char* fentree)
         	perror("stat");
         	exit(EXIT_SUCCESS);
    	}
+   	i = 0;
 	nbLettre = 0;
 	int taille = buf.st_size;
 	char* message = malloc(taille*sizeof(char));
@@ -82,7 +83,9 @@ char* lecture(char* fentree)
 				message[nbLettre] = car;
 				nbLettre++;
 			}
+		
 			printf("%c", car);
+
 	}
 	printf("\n");
 
@@ -90,25 +93,32 @@ char* lecture(char* fentree)
 	return message;
 }
 
-int* frequence(char* message, int debut, int incr)
+int frequence(int* tabFreq, char* message, int debut, int incr)
 {
-	int i, taille;
-	int* tabFreq = (int*)malloc(26*sizeof(int));
+	int i, taille, n;
 	
 	for(i=0;i<26;i++)
 	{
 		tabFreq[i] = 0;
 	}
 	
+	n = 0;
+	
 	taille = strlen(message);
 	for(i=debut;i<taille;i=i+incr)
-	
 	{
 		tabFreq[message[i]-'A']++;
+		n++;
 	}
 	
+	for(i=0;i<26;i++)
+	{
+		printf("%d ", tabFreq[i]);
+	}
+	printf("\n");
+
 	
-	return tabFreq;
+	return n;
 }
 
 
@@ -117,28 +127,28 @@ float indiceCoincidence(char* message, int debut, int incr)
 {
 	
 	int i, nbLettre;
+	int* tabFreq = (int*)malloc(26*sizeof(int));
 	float ic = 0.0;
 	float ni, n;
-	nbLettre = strlen(message);
 	
-	int* tabFreq = frequence(message, debut, incr);
+	nbLettre = frequence(tabFreq, message, debut, incr);
 	
+	ni = 0.0;
 	
 	for(i=0;i<26;i++)
 	{
-		ni = tabFreq[i]*(tabFreq[i]-1);
-		n = nbLettre*(nbLettre-1);
-
-		
-		ic = ic+(ni/n);
+		ni = ni+ tabFreq[i]*(tabFreq[i]-1);
 	}
+	
+	n = nbLettre*(nbLettre-1);
+	ic = ni/n;
 	
 	return ic;
 }
 
-int calculeIndice(char* message, int taille)
+int calculeIndice(char* message, int cle)
 {
-	int i, j, n, tailleCle;
+	int i, j, n, tailleCle, stop;
 	int* tabFreq;
 	double indice = 0.0;
 	double e = 0.003;
@@ -146,64 +156,65 @@ int calculeIndice(char* message, int taille)
 	double a = 0.076-e;
 	double b = 0.076+e;
 
-	
 	n = 1;
+	stop = 0;
 	
-	if(taille == 0)
+	if(cle == 0)
 	{
-		while(!((indice > a)&&(indice < b)))
+		while(stop == 0)
 		{
 			ic = 0.0;
 			for(i=0;i<n;i++)
 			{
 				ic = ic + indiceCoincidence(message, i, n);
 			}
-			ic = ic/n;
-			indice = indice + ic;
+			indice = ic/n;
 			n++;
+			
+			if(indice > 0.072)
+			{
+				stop = 1;
+			} 
 		}
-		
+	
+		tailleCle = n-1;
 	}
 	else
 	{
-		for(i=0;i<taille;i++)
+		tailleCle = cle;
+		for(i=0;i<tailleCle;i++)
 		{
-			ic = 0.0;
-			for(j=0;j<n;j++)
-			{
-				ic = ic + indiceCoincidence(message, j, n);
-			}
-			ic = ic/n;
-			indice = indice + ic;
-			n++;
+			ic = ic + indiceCoincidence(message, i, tailleCle+1);
 		}
+		indice = ic/tailleCle;
 	}
-			
-	tailleCle = n-1;
 	
 	printf("Indice de coincidence de %f pour une clé de taille %d.\n", indice, tailleCle);
 	return tailleCle;
 }
+			
 
 
-char* calculeCle(int tailleCle, int* tabFreq, char* message)
+
+char* calculeCle(int tailleCle, char* message)
 {
 	char* cle = (char*)malloc(tailleCle*sizeof(char));
-	int max, indiceMax, i, j;
+	int* freq = (int*)malloc(26*sizeof(int));
+	int max, indiceMax, i, j, nbLettre;
 	char c;
 	
 	max = 0;
 	
 	for(i=0;i<tailleCle;i++)
 	{
-		tabFreq = frequence(message, i, 4);
+		nbLettre = frequence(freq, message, i, tailleCle);
 		max = 0;
 		
 		for(j=0;j<26;j++)
 		{
-			if(tabFreq[j] > max)
+			if(freq[j] > max)
 			{
-				max = tabFreq[j];
+				max = freq[j];
 				indiceMax = j;
 			}
 		}
@@ -219,7 +230,7 @@ void decrypte(char* fentree, char* fsortie)
 {
 	int i, j, n, tailleCle, taille, choix, stop;
 	char car;
-	int* tabFreq;
+	int* tabFreq = (int*)malloc(26*sizeof(int));
 	double indice = 0.0;
 	double e = 0.003;
 	double ic = 0.0;
@@ -228,9 +239,9 @@ void decrypte(char* fentree, char* fsortie)
 	char* cle;
 	
 	char* message = lecture(fentree);
-	
+
 	tailleCle = calculeIndice(message, 0);
-	cle = calculeCle(tailleCle, tabFreq, message);
+	cle = calculeCle(tailleCle, message);
 	
 	printf("La clé est : ");
 	for(i=0;i<tailleCle;i++)
@@ -270,8 +281,8 @@ void decrypte(char* fentree, char* fsortie)
 				scanf("%*[^\n]s");
 				getchar();
 				
-				tailleCle = calculeIndice(message, tailleCle); 	
-				cle = calculeCle(tailleCle, tabFreq, message);
+				calculeIndice(message, tailleCle);
+				cle = calculeCle(tailleCle, message);
 				dechiffre(fentree, cle, fsortie);
 			}
 			break;
@@ -316,10 +327,6 @@ void decrypte(char* fentree, char* fsortie)
 					}
 				}
 				
-				
-			
-			
-				
 			}
 			break;
 			default:  
@@ -328,7 +335,6 @@ void decrypte(char* fentree, char* fsortie)
 			}
 		}
 	}
-	
 }
 
 
