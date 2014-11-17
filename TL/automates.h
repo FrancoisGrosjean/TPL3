@@ -17,6 +17,9 @@ typedef struct
 //Ajoute la transition (depart, etiquette, arrivee) dans l'automate A.
 void ajouteTransition(automate* A, int depart, int arrivee, char etiquette);
 
+//Construit un automate exemple pour la déterminisation
+automate* construitAutomateExempleDeterminisation();
+
 //Crée en mémoire l'automate exemple et renvoie un pointeur vers cet automate
 automate* construitAutomateExemple();
 
@@ -59,8 +62,14 @@ automate* produit(automate* au1, automate* au2);
 //Retourne 1 si l'intersection est vide, 0 sinon.
 int intersectionVide(automate* au1, automate* au2);
 
-//Déterminise un automate.
+//Déterminisation d'un automate.
 void determinise(automate* A);
+
+//Détermine si deux états sont équivalents
+int nerodeEquivalent(automate* A, int e1, int e2);
+
+//Minimisation d'un automate
+void minimiseNerode(automate* A);
 
 
 

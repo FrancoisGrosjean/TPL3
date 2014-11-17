@@ -83,6 +83,37 @@ automate* creerAutomate()
 	}
 	return A;
 }
+
+automate* construitAutomateExempleDeterminisation()
+{
+	automate* A = (automate*)malloc(sizeof(automate));
+	int i,j;
+	A->size=3;
+	A->sizealpha=2;
+	A->initial=(int*) malloc(A->size*sizeof(int));
+	A->initial[0]=1;
+	A->initial[1]=0;
+	A->initial[2]=0;
+	A->final=(int*) malloc(A->size*sizeof(int));
+	A->final[0]=0;
+	A->final[1]=0;
+	A->final[2]=1;
+	A->trans=(liste***) malloc(A->size*sizeof(liste**));
+	for(i=0;i<A->size;i++)
+	{
+		A->trans[i]=(liste**) malloc(A->sizealpha*sizeof(liste*));
+		for(j=0;j<A->sizealpha;j++)
+		{
+			A->trans[i][j]=NULL;
+		}
+	}
+	ajouteTransition(A,0,0,'a');
+	ajouteTransition(A,0,0,'b');
+	ajouteTransition(A,0,1,'a');
+	ajouteTransition(A,1,2,'a');
+	ajouteTransition(A,1,2,'b');
+	return A;
+}
 	
 automate* construitAutomateExemple()
 {
@@ -365,7 +396,7 @@ void fusionEtats(automate* A, int p1, int p2)
 		return;
 	}
 	
-	// on met les transitions de l'état 2 dans l'état 1
+
 	for(i=0; i<A->size; i++)
 	{
 		for(j=0; j<A->sizealpha; j++)
@@ -505,35 +536,71 @@ int intersectionVide(automate* au1, automate* au2)
 
 void determinise(automate* A)
 {
-	int i, j, n;
+
+	/*if(deterministe(A) == 0)
+	{
+		return;
+	}*/
+
 	
+	int i, j, k, n, init, test;
 	ifile* file = (ifile*)malloc(sizeof(ifile));
 	int* pt = (int*)malloc(A->size*sizeof(int));
 	liste* tmp;
-	
-	
-	for(i=0; i<A->size; i++)
+	iliste* tmpFile;
+
+	for(i=0;i<A->size;i++)
 	{
-		
-		for(j=0; j<A->sizealpha; j++)
+		if(A->initial[i] == 1)
 		{
-			tmp = A->trans[i][j];
-			n = 0;
-			while(NULL != tmp)
-			{
-				pt[n] = tmp->state;
-				tmp = tmp->suiv;
-				n++;
-			}
-			
-			if(estDansFile(file, pt, n) == 0)
-			{
-				ajouteFile(file, pt, n);
-			}
+			pt[0] = i;
+			break;
 		}
 	}
-	
+
+	ajouteFile(file, pt, 1);
+
+
+
+
+
+	tmpFile = file->debut;
+	while(tmpFile != NULL)
+	{
+		for(i=0; i<A->sizealpha; i++)
+		{
+			
+			for(j=0; j<tmpFile->tailleVal; j++)
+			{
+				tmp = A->trans[tmpFile->val[j]][i]; 
+				n = 0;
+				while(NULL != tmp)
+				{
+					pt[n] = tmp->state;
+					tmp = tmp->suiv;
+					n++;
+				}
+				
+				if(estDansFile(file, pt, n) == 0)
+				{
+					ajouteFile(file, pt, n);
+				}
+			}
+		}
+		tmpFile = tmpFile->suiv;
+	}
 	afficheFile(file);
+
+	
+	
+	
+
+	
+					
+						
+
+	
+		
 }
 	
 
@@ -542,55 +609,55 @@ void determinise(automate* A)
 
 int nerodeEquivalent(automate* A, int e1, int e2)
 {
-	int j=0;
+	int i;
 	
 	if(A->final[e1] != A->final[e2])
 	{
 		return 0;
 	}
 
-	while(j<A->sizeAlpha)
+	for(i=0;i<A->sizealpha;i++)
 	{
-		if(A->final[A->trans[e1][j]->state] != A->final[(A->trans[e2][j]->state] ){
+		if(A->final[A->trans[e1][i]->state] != A->final[A->trans[e2][i]->state] ){
 			return 0;
 		}
-		j++;
 	}
 	
 	return 1;
 }
 
 void minimiseNerode(automate* A){
-	int i = 0;
-	int j = 0;
+	int i, j;
 	
 	if(deterministe(A) == 0)
 	{
-		printf("Automate non déterministe > Fonction de déterminisation non implémentée");
+		printf("Automate non déterministe > Fonction de déterminisation non implémentée\n");
 		//determinise(A);
+		return;
+		
 	}
 	
 	if(complet(A) == 0)
 	{
-		completer(*au);
+		printf("Automate non complet > Complétion de l'automate.\n");
+		completeAutomate(A);
 	}
-	
 
-	while(i<A->size)
+	j = 0;
+	for(i=0;i<A->size;i++)
 	{
 		j = i + 1;
 		while(j<A->size)
 		{
 			if(nerodeEquivalent(A,i,j))
 			{
-			fusionEtats(A,i,j);
+				fusionEtats(A,i,j);
 			}
 			else
 			{
 				j++;
 			}
 		}
-		i++;
 	}
 }
 

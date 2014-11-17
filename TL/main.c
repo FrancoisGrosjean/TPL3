@@ -20,6 +20,7 @@ automate* choixAutomate()
 		printf("\n");
 		printf("1. Créer un automate.\n");
 		printf("2. Utiliser l'automate exemple.\n");
+		printf("3. Utiliser l'automate exemple de la déterminisation.\n");
 		scanf("%d",&choix);
 		scanf("%*[^\n]s");
 		getchar();
@@ -37,6 +38,12 @@ automate* choixAutomate()
 				{
 					err = 0;
 					A = construitAutomateExemple();
+				}
+				break;
+				case 3:
+				{
+					err = 0;
+					A = construitAutomateExempleDeterminisation();
 				}
 				break;
 				default:
@@ -324,7 +331,11 @@ void menu(automate* A)
 			{}
 			break;
 			case 5:
-			{}
+			{
+				printf("Minimisation de l'automate.\n");
+				minimiseNerode(A);
+				afficheAutomate(A);
+			}
 			break;
 			case 6:
 			{
@@ -350,7 +361,6 @@ int main()
 {
 	automate* A;
 	A = choixAutomate();
-	
 	determinise(A);
 	//menu(A);
 
