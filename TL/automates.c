@@ -115,7 +115,7 @@ automate* construitAutomateExemple()
 void afficheTransition(automate* A)
 {
 
-	int i, j, k;
+	int i, j;
 	liste* tmp; 
 
 	printf("\nLes transitions :\n");
@@ -146,7 +146,7 @@ void afficheTransition(automate* A)
 
 void afficheAutomate(automate* A)
 {
-	int i,j;
+	int i;
 
 	printf("Les états initiaux :\n");
 	for(i=0; i<A->size; i++)
@@ -495,12 +495,11 @@ automate* produit(automate* au1, automate* au2)
 int intersectionVide(automate* au1, automate* au2)
 {
 	automate* tmp = (automate*)malloc(sizeof(automate));
-	int res;
 	
 	tmp = produit(au1, au2);
-	res = langageVide(tmp);
+	
 
-	return res;
+	return langageVide(tmp);
 }
 
 
@@ -523,13 +522,10 @@ void determinise(automate* A)
 			while(NULL != tmp)
 			{
 				pt[n] = tmp->state;
-				tmp = A->trans[i][j];
+				tmp = tmp->suiv;
 				n++;
 			}
 			
-			pt = realloueMemoire(pt, n);
-			
-	
 			if(estDansFile(file, pt, n) == 0)
 			{
 				ajouteFile(file, pt, n);
@@ -542,7 +538,61 @@ void determinise(automate* A)
 	
 
 
+
+
+int nerodeEquivalent(automate* A, int e1, int e2)
+{
+	int j=0;
 	
+	if(A->final[e1] != A->final[e2])
+	{
+		return 0;
+	}
+
+	while(j<A->sizeAlpha)
+	{
+		if(A->final[A->trans[e1][j]->state] != A->final[(A->trans[e2][j]->state] ){
+			return 0;
+		}
+		j++;
+	}
+	
+	return 1;
+}
+
+void minimiseNerode(automate* A){
+	int i = 0;
+	int j = 0;
+	
+	if(deterministe(A) == 0)
+	{
+		printf("Automate non déterministe > Fonction de déterminisation non implémentée");
+		//determinise(A);
+	}
+	
+	if(complet(A) == 0)
+	{
+		completer(*au);
+	}
+	
+
+	while(i<A->size)
+	{
+		j = i + 1;
+		while(j<A->size)
+		{
+			if(nerodeEquivalent(A,i,j))
+			{
+			fusionEtats(A,i,j);
+			}
+			else
+			{
+				j++;
+			}
+		}
+		i++;
+	}
+}
 
 
 
