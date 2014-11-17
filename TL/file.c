@@ -1,31 +1,26 @@
 #include "file.h"
 
-int estDansFile(ifile* f, int* pt, int n){
+int estDansFile(ifile* f, int* pt, int n)
+{
 	int i;
 	iliste* tmp;
-	tmp = f->debut;
-	
-	while(tmp)
-	{
-		if(tmp->tailleVal == n)
-		{
+	tmp=f->debut;
+	while(tmp){
+			if(tmp->tailleVal == n){
 			i=0;
-			while(i< n && pt[i]==tmp->val[i])
-			{
+			while(i< n && pt[i]==tmp->val[i]){
 				i++;
 			}
-			
-			if(i == n) 
-			{
+			if(i == n) {
 				return tmp->state;
 			}
 		}
 		tmp=tmp->suiv;
 	}
-	return 0;
+	return -1;
 }
 
-void ajouteFile(ifile* f, int* pt,int n){
+void ajouteFile(ifile* f, int* pt, int n){
 	int i;
 	iliste* tmp;
 	

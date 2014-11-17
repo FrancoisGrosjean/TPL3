@@ -18,7 +18,6 @@ typedef struct
 	iliste* fin;
 } ifile;
 
-//Fonction qui vérifie si un état est déjà dans la file > retourne le numéro de l'état.
 int estDansFile(ifile* f, int* pt, int n);
 
 void ajouteFile(ifile* f, int* pt,int n);

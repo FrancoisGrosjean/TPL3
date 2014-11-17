@@ -328,7 +328,10 @@ void menu(automate* A)
 			}
 			break;
 			case 4:
-			{}
+			{
+				determinise(A);
+				printf("	L'automate a été déterminisé.\n");
+			}
 			break;
 			case 5:
 			{
@@ -361,8 +364,7 @@ int main()
 {
 	automate* A;
 	A = choixAutomate();
-	A = determinise(A);
-	//menu(A);
+	menu(A);
 
 }
 	
