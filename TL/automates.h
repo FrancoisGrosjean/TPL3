@@ -63,7 +63,7 @@ automate* produit(automate* au1, automate* au2);
 int intersectionVide(automate* au1, automate* au2);
 
 //Déterminisation d'un automate.
-void determinise(automate* A);
+automate* determinise(automate* A);
 
 //Détermine si deux états sont équivalents
 int nerodeEquivalent(automate* A, int e1, int e2);

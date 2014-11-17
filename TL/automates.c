@@ -534,7 +534,7 @@ int intersectionVide(automate* au1, automate* au2)
 }
 
 
-void determinise(automate* A)
+automate* determinise(automate* A)
 {
 
 	/*if(deterministe(A) == 0)
@@ -569,42 +569,113 @@ void determinise(automate* A)
 	{
 		for(i=0; i<A->sizealpha; i++)
 		{
+			n = 0;
 			
 			for(j=0; j<tmpFile->tailleVal; j++)
 			{
 				tmp = A->trans[tmpFile->val[j]][i]; 
-				n = 0;
+			
 				while(NULL != tmp)
 				{
 					pt[n] = tmp->state;
 					tmp = tmp->suiv;
 					n++;
 				}
-				
-				if(estDansFile(file, pt, n) == 0)
-				{
-					ajouteFile(file, pt, n);
-				}
+			}
+			if(estDansFile(file, pt, n) == 0)
+			{
+				ajouteFile(file, pt, n);
 			}
 		}
 		tmpFile = tmpFile->suiv;
 	}
+	
 	afficheFile(file);
 
-	
-	
-	
+	//Création de l'automate déterminisé
+	automate* D = (automate*) malloc (sizeof(automate));
+	D->size = file->fin->state + 1;
+	D->sizealpha = A->sizealpha;
+
+	for(i=0;i<D->size;i++)
+	{
+		if(i == 0)
+		{
+			D->initial[i] = 1;
+		}
+		else
+		{
+			D->initial[i] = 0;
+		}
+	}
 
 	
-					
-						
-
+	D->final=(int*) malloc(D->size*sizeof(int));
+	tmpFile = file->debut;
 	
+	while(tmpFile != NULL){
+		for(i=0; i<tmpFile->tailleVal; i++)
+		{
+			if(A->final[tmpFile->val[i]] == 1)
+			{
+				D->final[tmpFile->state] = 1;
+			}
+			else
+			{
+				D->final[tmpFile->state] = 0;
+			}
+		}
+		tmpFile = tmpFile->suiv;
+	}
+
+	D->trans=(liste***) malloc(D->size*sizeof(liste**));
+	
+	for(i=0;i<D->size;i++)
+	{
+		D->trans[i]=(liste**) malloc(D->sizealpha*sizeof(liste*));
 		
+		for(j=0;j<D->sizealpha;j++)
+		{
+			D->trans[i][j]=NULL;
+		}
+	}
+	/*
+	tmpFile = file->debut;
+
+	while(tmpFile != NULL)
+	{
+		for(i=0; i<A->sizealpha; j++)
+		{
+			n = 0;
+		
+			for(j=0; j<tmpFile->tailleVal; j++)
+			{
+				tmp = A->trans[tmpFile->val[j]][i];
+				
+				while(tmp != NULL)
+				{
+					pt[n] = tmp->state;
+					tmp = tmp->suiv;
+					n++;
+				}
+			}
+			
+			test = estDansFile(file, pt, n);
+
+
+			if(test != 0){
+				ajouteTransition(D,tmpFile->state,test,(char)('a' + i));
+			}
+		}
+		tmpFile = tmpFile->suiv;
+	}
+
+	free(pt);
+	free(tmp);
+	free(tmpFile);
+	*/
+	return D;
 }
-	
-
-
 
 
 int nerodeEquivalent(automate* A, int e1, int e2)

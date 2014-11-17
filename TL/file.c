@@ -17,7 +17,7 @@ int estDansFile(ifile* f, int* pt, int n){
 			
 			if(i == n) 
 			{
-				return 1;
+				return tmp->state;
 			}
 		}
 		tmp=tmp->suiv;
