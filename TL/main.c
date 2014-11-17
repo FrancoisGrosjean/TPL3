@@ -361,7 +361,7 @@ int main()
 {
 	automate* A;
 	A = choixAutomate();
-	determinise(A);
+	A = determinise(A);
 	//menu(A);
 
 }

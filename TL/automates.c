@@ -548,6 +548,7 @@ automate* determinise(automate* A)
 	int* pt = (int*)malloc(A->size*sizeof(int));
 	liste* tmp;
 	iliste* tmpFile;
+	automate* D = (automate*) malloc (sizeof(automate));
 
 	for(i=0;i<A->size;i++)
 	{
@@ -592,6 +593,8 @@ automate* determinise(automate* A)
 	
 	afficheFile(file);
 
+
+	/*
 	//Création de l'automate déterminisé
 	automate* D = (automate*) malloc (sizeof(automate));
 	D->size = file->fin->state + 1;
@@ -639,7 +642,7 @@ automate* determinise(automate* A)
 			D->trans[i][j]=NULL;
 		}
 	}
-	/*
+	
 	tmpFile = file->debut;
 
 	while(tmpFile != NULL)
